@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-col cols="12" class="mb-4">
-            <SktmTable />
+            <SktmTables />
         </v-col>
         <v-col cols="12" class="mg-4">
             <SkckTable />
@@ -22,7 +22,7 @@
     </div>
 </template>
 <script>
-import SktmTableVue from '~/components/SktmTable.vue'
+import SktmTablesVue from '~/components/sekdes/SktmTables.vue'
 import SkckTableVue from '~/components/SkckTable.vue'
 import DomisiliTable from '~/components/DomisiliTable.vue'
 import SkuTable from '../../../components/SkuTable.vue'
@@ -32,7 +32,7 @@ import SuratKeteranganTable from '../../../components/SuratKeteranganTable.vue'
 export default {
     layout: 'sekdes',
     components: {
-        SktmTableVue,
+        SktmTablesVue,
         SkckTableVue,
         DomisiliTable,
         SkuTable,
