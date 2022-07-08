@@ -132,7 +132,7 @@ export default {
                 'NIK': 'nik',
                 'Nama': 'nama',
                 'Keterangan': 'keterangan',
-                'Status': 'status'
+               // 'Status': 'status'
             },
             json_data: [],
             json_meta: [
@@ -159,7 +159,7 @@ export default {
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
                 { text: 'Keterangan', value: 'keterangan' },
-                { text: 'Status', value: 'status' },
+               // { text: 'Status', value: 'status' },
             ],
             pageSize: 5,
             pageSizes: [5, 10, 20, 50, 100],
@@ -259,7 +259,7 @@ export default {
                     nik: surat_keterangan.nik,
                     nama: surat_keterangan.nama,
                     keterangan: surat_keterangan.keterangan,
-                    status: status,
+                  //  status: status,
                 };
             })
             this.surat_keterangans = data.data.map((surat_keterangan, i) => {
@@ -270,7 +270,7 @@ export default {
                     no: no,
                     id: surat_keterangan.id,
                     nama: surat_keterangan.nama,
-                    status: status,
+                  //  status: status,
                     keterangan: surat_keterangan.keterangan,
                     nik: surat_keterangan.nik,
                     tanggal: tgl

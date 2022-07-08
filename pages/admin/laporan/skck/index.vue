@@ -132,7 +132,7 @@ export default {
                 'NIK': 'nik',
                 'Nama': 'nama',
                 'Keperluan': 'keperluan',
-                'Status': 'status'
+                //'Status': 'status'
             },
             json_data: [],
             json_meta: [
@@ -158,7 +158,8 @@ export default {
                 { text: 'Tanggal', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                { text: 'Status', value: 'status' },
+                { text: 'Keperluan', value: 'keperluan' },
+               // { text: 'Status', value: 'status' },
             ],
             pageSize: 5,
             pageSizes: [5, 10, 20, 50, 100],
@@ -258,7 +259,7 @@ export default {
                     nik: skck.nik,
                     nama: skck.nama,
                     keperluan: skck.keperluan,
-                    status: status,
+                   // status: status,
                 };
             })
             this.skcks = data.data.map((skck, i) => {
@@ -269,7 +270,8 @@ export default {
                     no: no,
                     id: skck.id,
                     nama: skck.nama,
-                    status: status,
+                    keperluan: skck.keperluan,
+                   // status: status,
                     nik: skck.nik,
                     tanggal: tgl
                 };

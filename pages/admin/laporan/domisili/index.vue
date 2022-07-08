@@ -158,7 +158,8 @@ export default {
                 { text: 'Tanggal', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                { text: 'Status', value: 'status' },
+                { text: 'Keperluan', value: 'keperluan' },
+                //{ text: 'Status', value: 'status' },
             ],
             pageSize: 5,
             pageSizes: [5, 10, 20, 50, 100],
@@ -258,7 +259,7 @@ export default {
                     nik: domisili.nik,
                     nama: domisili.nama,
                     keperluan: domisili.keperluan,
-                    status: status,
+                   // status: status,
                 };
             })
             this.domisilis = data.data.map((domisili, i) => {
@@ -269,7 +270,8 @@ export default {
                     no: no,
                     id: domisili.id,
                     nama: domisili.nama,
-                    status: status,
+                    keperluan: domisili.keperluan,
+                   // status: status,
                     nik: domisili.nik,
                     tanggal: tgl
                 };

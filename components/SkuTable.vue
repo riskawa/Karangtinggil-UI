@@ -158,7 +158,7 @@ export default {
                 confirmButtonColor: '#459EED',
                 cancelButtonColor: '#d33',
                 showLoaderOnConfirm: true,
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: 'Yes',
                 preConfirm: (hapus) => {
                     const fd = new FormData()
                     fd.append('status', '1')
@@ -200,13 +200,13 @@ export default {
             const sku = val
             this.$swal.fire({
                 title: 'Peringatan?',
-                text: "Apakah anda yakin mengubah status permohonan SKU " + sku.nama + "menjadi sudah diambil?",
+                text: "Apakah anda yakin mengubah status permohonan SKU " + sku.nama + " menjadi sudah diambil?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#459EED',
                 cancelButtonColor: '#d33',
                 showLoaderOnConfirm: true,
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: 'Yes',
                 preConfirm: (hapus) => {
                     const fd = new FormData()
                     fd.append('status', '2')
@@ -238,7 +238,7 @@ export default {
                     })
                     Toast.fire({
                         icon: 'success',
-                        title: 'Sukses menyetujui permohonan'
+                        title: 'Surat sudah diambil'
                     })
                     this.getSKUData()
                 }

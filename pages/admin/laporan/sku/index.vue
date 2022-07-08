@@ -134,7 +134,7 @@ export default {
                 'Nama Usaha': 'nama_usaha',
                 'Jenis Usaha': 'jenis_usaha',
                 'Alamat Usaha': 'alamat_usaha',
-                'Status': 'status'
+                //'Status': 'status'
             },
             json_data: [],
             json_meta: [
@@ -163,7 +163,7 @@ export default {
                 { text: 'Nama Usaha', value: 'nama_usaha' },
                 { text: 'Jenis Usaha', value: 'jenis_usaha' },
                 { text: 'Alamat Usaha', value: 'alamat_usaha' },
-                { text: 'Status', value: 'status' },
+               // { text: 'Status', value: 'status' },
             ],
             pageSize: 5,
             pageSizes: [5, 10, 20, 50, 100],
@@ -265,7 +265,7 @@ export default {
                     nama_usaha: sku.nama_usaha,
                     jenis_usaha: sku.jenis_usaha,
                     alamat_usaha: sku.alamat_usaha,
-                    status: status,
+                   // status: status,
                 };
             })
             this.skus = data.data.map((sku, i) => {
@@ -276,7 +276,7 @@ export default {
                     no: no,
                     id: sku.id,
                     nama: sku.nama,
-                    status: status,
+                    //status: status,
                     nik: sku.nik,
                     nama_usaha: sku.nama_usaha,
                     jenis_usaha: sku.jenis_usaha,

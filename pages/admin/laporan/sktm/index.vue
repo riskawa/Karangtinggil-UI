@@ -131,8 +131,8 @@ export default {
                 'Tanggal': 'tanggal',
                 'NIK': 'nik',
                 'Nama': 'nama',
-                'Keperluan': 'keperluan',
-                'Status': 'status'
+                'Keperluan': 'keperluan'
+                //'Status': 'status'
             },
             json_data: [],
             json_meta: [
@@ -158,7 +158,8 @@ export default {
                 { text: 'Tanggal', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                { text: 'Status', value: 'status' },
+                { text: 'Keperluan', value: 'keperluan' },
+                //{ text: 'Status', value: 'status' },
             ],
             pageSize: 5,
             pageSizes: [5, 10, 20, 50, 100],
@@ -251,14 +252,14 @@ export default {
             this.json_data = data.data.map((sktm, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(sktm.created_at).toFormat('yyyy-LL-dd')
-                const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+               // const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
                 return {
                     no: no,
                     tanggal: tgl,
                     nik: sktm.nik,
                     nama: sktm.nama,
                     keperluan: sktm.keperluan,
-                    status: status,
+                   // status: status,
                 };
             })
             this.sktms = data.data.map((sktm, i) => {
@@ -269,7 +270,8 @@ export default {
                     no: no,
                     id: sktm.id,
                     nama: sktm.nama,
-                    status: status,
+                    keperluan: sktm.keperluan,
+                   // status: status,
                     nik: sktm.nik,
                     tanggal: tgl
                 };
