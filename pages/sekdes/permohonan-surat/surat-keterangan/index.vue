@@ -3,10 +3,10 @@
         <v-card>
             <v-toolbar flat>
                 <v-toolbar-title class="text-h5">
-                    Data Permohonan SKTM
+                    Data Permohonan Surat Keterangan
                 </v-toolbar-title>
-                <v-spacer></v-spacer>
 
+                <v-spacer></v-spacer>
                 <v-spacer></v-spacer>
 
                 <v-text-field solo append-icon="mdi-magnify" v-model="search" label="Cari kata kunci" single-line
@@ -18,15 +18,15 @@
             <v-divider></v-divider>
             <v-card-text>
                 <v-col cols="12">
-                    <v-data-table :headers="headers" :items="sktms" disable-pagination :options.sync="options"
-                        :server-items-length="totalSKTMs" :loading="loading" class="elevation-1 mb-2"
-                        :hide-default-footer="true">
+                    <v-data-table :headers="headers" :items="surat_keterangans" disable-pagination
+                        :options.sync="options" :server-items-length="totalSKs" :loading="loading"
+                        class="elevation-1 mb-2" :hide-default-footer="true">
                         <template v-slot:[`item.actions`]="{ item }">
-                            <router-link :to="'/sekdes/permohonan-surat/sktm/' + item.id" class="primary--text"
-                                style="text-decoration: none;">
+                            <router-link :to="'/sekdes/permohonan-surat/surat-keterangan/' + item.id"
+                                class="primary--text" style="text-decoration: none;">
                                 Selengkapnya</router-link>
                             |
-                            <!-- <router-link :to="'/admin/permohonan-surat/sktm/' + item.id + '/edit'" class="primary--text"
+                            <!-- <router-link :to="'/admin/permohonan-surat/surat-keterangan/' + item.id + '/edit'" class="primary--text"
                                 style="text-decoration: none;">
                                 Edit</router-link>
                             | -->
@@ -62,8 +62,8 @@ export default {
     layout: 'sekdes',
     data() {
         return {
-            totalSKTMs: 0,
-            sktms: [],
+            totalSKs: 0,
+            surat_keterangans: [],
             loading: true,
             options: {},
             search: '',
@@ -77,7 +77,6 @@ export default {
                 { text: 'Tanggal', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                { text: 'Status', value: 'status' },
                 { text: 'Aksi', value: 'actions' },
             ],
             pageSize: 5,
@@ -90,61 +89,59 @@ export default {
         options: {
             handler() {
                 // this.getDataFromApi()
-                this.getSKTMData()
+                this.getSKData()
             },
             deep: true,
         },
         search(value) {
             this.search = value
             this.page = 1
-            this.getSKTMData()
+            this.getSKData()
         }
     },
     methods: {
-        async getSKTMData() {
+        async getSKData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/sktm', {
+            await this.$axios.$get('http://localhost:3333/surat-keterangan', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
                     search: this.search
                 }
             }).then(res => {
-                this.getDisplaySKTM(res)
-                this.totalSKTMs = res.meta.total
+                this.getDisplaySK(res)
+                this.totalSKs = res.meta.total
                 this.loading = false
                 this.totalPages = res.meta.last_page
             })
         },
-        getDisplaySKTM(data) {
-            this.sktms = data.data.map((sktm, i) => {
+        getDisplaySK(data) {
+            this.surat_keterangans = data.data.map((surat_keterangan, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
-                const tgl = DateTime.fromISO(sktm.created_at).toFormat('yyyy-LL-dd')
-                const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const tgl = DateTime.fromISO(surat_keterangan.created_at).toFormat('yyyy-LL-dd')
                 return {
                     no: no,
-                    id: sktm.id,
-                    nama: sktm.nama,
-                    status: status,
-                    nik: sktm.nik,
+                    id: surat_keterangan.id,
+                    nama: surat_keterangan.nama,
+                    nik: surat_keterangan.nik,
                     tanggal: tgl
                 };
             })
         },
         handlePageChange(value) {
             this.page = value;
-            this.getSKTMData();
+            this.getSKData();
         },
         handlePageSizeChange(size) {
             this.pageSize = size;
             this.page = 1;
-            this.getSKTMData();
+            this.getSKData();
         },
         hapus(val) {
-            const sktm = val
+            const surat_keterangan = val
             this.$swal.fire({
                 title: 'Peringatan?',
-                text: "Apakah anda yakin untuk hapus data " + sktm.nama,
+                text: "Apakah anda yakin untuk hapus data " + surat_keterangan.nama,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#459EED',
@@ -152,12 +149,12 @@ export default {
                 showLoaderOnConfirm: true,
                 confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
-                    return this.$axios.$delete(`http://localhost:3333/sktm/${sktm.id}`)
+                    return this.$axios.$delete(`http://localhost:3333/surat-keterangan/${surat_keterangan.id}`)
                         .then(res => {
                             console.log(res)
                         })
                         .catch(err => {
-                            this.$swal.fire('Gagal!', 'Gagal hapus data' + sktm.nama, 'error')
+                            this.$swal.fire('Gagal!', 'Gagal hapus data' + surat_keterangan.nama, 'error')
                             this.$swal.hideLoading()
                         })
                 },
@@ -166,16 +163,16 @@ export default {
                 if (result.isConfirmed) {
                     this.$swal.fire(
                         'Sukses!',
-                        'Berhasil hapus data ' + sktm.nama,
+                        'Berhasil hapus data ' + surat_keterangan.nama,
                         'success'
                     )
-                    this.getSKTMData()
+                    this.getSKData()
                 }
             })
         }
     },
     mounted() {
-        this.getSKTMData()
+        this.getSKData()
     }
 }
 </script>

@@ -3,33 +3,29 @@
         <v-card>
             <v-toolbar flat>
                 <v-toolbar-title class="text-h5">
-                    Data Permohonan SKTM
+                    Data Permohonan SKU
                 </v-toolbar-title>
-                <v-spacer></v-spacer>
 
+                <v-spacer></v-spacer>
                 <v-spacer></v-spacer>
 
                 <v-text-field solo append-icon="mdi-magnify" v-model="search" label="Cari kata kunci" single-line
                     hide-details>
                 </v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" to="/sekdes/permohonan-surat/">Kembali</v-btn>
+                <v-btn color="primary" to="/sekdes/permohonan-surat">Kembali</v-btn>
             </v-toolbar>
             <v-divider></v-divider>
             <v-card-text>
                 <v-col cols="12">
-                    <v-data-table :headers="headers" :items="sktms" disable-pagination :options.sync="options"
-                        :server-items-length="totalSKTMs" :loading="loading" class="elevation-1 mb-2"
+                    <v-data-table :headers="headers" :items="skus" disable-pagination :options.sync="options"
+                        :server-items-length="totalSKUs" :loading="loading" class="elevation-1 mb-2"
                         :hide-default-footer="true">
                         <template v-slot:[`item.actions`]="{ item }">
-                            <router-link :to="'/sekdes/permohonan-surat/sktm/' + item.id" class="primary--text"
+                            <router-link :to="'/sekdes/permohonan-surat/sku/' + item.id" class="primary--text"
                                 style="text-decoration: none;">
                                 Selengkapnya</router-link>
                             |
-                            <!-- <router-link :to="'/admin/permohonan-surat/sktm/' + item.id + '/edit'" class="primary--text"
-                                style="text-decoration: none;">
-                                Edit</router-link>
-                            | -->
                             <a href="javascript:void(0)" class="primary--text" @click="hapus(item)"
                                 style="text-decoration: none;">Hapus</a>
                         </template>
@@ -62,8 +58,8 @@ export default {
     layout: 'sekdes',
     data() {
         return {
-            totalSKTMs: 0,
-            sktms: [],
+            totalSKUs: 0,
+            skus: [],
             loading: true,
             options: {},
             search: '',
@@ -77,7 +73,6 @@ export default {
                 { text: 'Tanggal', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                { text: 'Status', value: 'status' },
                 { text: 'Aksi', value: 'actions' },
             ],
             pageSize: 5,
@@ -90,61 +85,59 @@ export default {
         options: {
             handler() {
                 // this.getDataFromApi()
-                this.getSKTMData()
+                this.getSKUData()
             },
             deep: true,
         },
         search(value) {
             this.search = value
             this.page = 1
-            this.getSKTMData()
+            this.getSKUData()
         }
     },
     methods: {
-        async getSKTMData() {
+        async getSKUData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/sktm', {
+            await this.$axios.$get('http://localhost:3333/sku', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
                     search: this.search
                 }
             }).then(res => {
-                this.getDisplaySKTM(res)
-                this.totalSKTMs = res.meta.total
+                this.getDisplaySKU(res)
+                this.totalSKUs = res.meta.total
                 this.loading = false
                 this.totalPages = res.meta.last_page
             })
         },
-        getDisplaySKTM(data) {
-            this.sktms = data.data.map((sktm, i) => {
+        getDisplaySKU(data) {
+            this.skus = data.data.map((sku, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
-                const tgl = DateTime.fromISO(sktm.created_at).toFormat('yyyy-LL-dd')
-                const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const tgl = DateTime.fromISO(sku.created_at).toFormat('yyyy-LL-dd')
                 return {
                     no: no,
-                    id: sktm.id,
-                    nama: sktm.nama,
-                    status: status,
-                    nik: sktm.nik,
+                    id: sku.id,
+                    nama: sku.nama,
+                    nik: sku.nik,
                     tanggal: tgl
                 };
             })
         },
         handlePageChange(value) {
             this.page = value;
-            this.getSKTMData();
+            this.getSKUData();
         },
         handlePageSizeChange(size) {
             this.pageSize = size;
             this.page = 1;
-            this.getSKTMData();
+            this.getSKUData();
         },
         hapus(val) {
-            const sktm = val
+            const sku = val
             this.$swal.fire({
                 title: 'Peringatan?',
-                text: "Apakah anda yakin untuk hapus data " + sktm.nama,
+                text: "Apakah anda yakin untuk hapus data " + sku.nama,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#459EED',
@@ -152,12 +145,12 @@ export default {
                 showLoaderOnConfirm: true,
                 confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
-                    return this.$axios.$delete(`http://localhost:3333/sktm/${sktm.id}`)
+                    return this.$axios.$delete(`http://localhost:3333/sku/${sku.id}`)
                         .then(res => {
                             console.log(res)
                         })
                         .catch(err => {
-                            this.$swal.fire('Gagal!', 'Gagal hapus data' + sktm.nama, 'error')
+                            this.$swal.fire('Gagal!', 'Gagal hapus data' + sku.nama, 'error')
                             this.$swal.hideLoading()
                         })
                 },
@@ -166,16 +159,16 @@ export default {
                 if (result.isConfirmed) {
                     this.$swal.fire(
                         'Sukses!',
-                        'Berhasil hapus data ' + sktm.nama,
+                        'Berhasil hapus data ' + sku.nama,
                         'success'
                     )
-                    this.getSKTMData()
+                    this.getSKUData()
                 }
             })
         }
     },
     mounted() {
-        this.getSKTMData()
+        this.getSKUData()
     }
 }
 </script>

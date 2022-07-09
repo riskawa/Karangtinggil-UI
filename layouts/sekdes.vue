@@ -63,8 +63,8 @@ export default {
       fixed: false,
       items: [
         { icon: 'mdi-view-dashboard', title: 'Dashboard', to: '/sekdes/dashboard' },
-        { icon: 'mdi-file-document-multiple', title: 'Status Permohonan', to: '/sekdes/permohonan-surat' },
-        { icon: 'mdi-file-document-multiple', title: 'Permohonan Surat', to: '/sekdes/status-permohonan' },
+        { icon: 'mdi-file-document-multiple', title: 'Permohonan Surat', to: '/sekdes/permohonan-surat' },
+        { icon: 'mdi-order-bool-ascending-variant', title: 'Status Permohonan', to: '/sekdes/status-permohonan' },
       ],
       miniVariant: false,
       // right: true,

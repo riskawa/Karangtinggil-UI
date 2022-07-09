@@ -3,33 +3,29 @@
         <v-card>
             <v-toolbar flat>
                 <v-toolbar-title class="text-h5">
-                    Data Permohonan SKTM
+                    Data Permohonan Kehilangan KK
                 </v-toolbar-title>
-                <v-spacer></v-spacer>
 
+                <v-spacer></v-spacer>
                 <v-spacer></v-spacer>
 
                 <v-text-field solo append-icon="mdi-magnify" v-model="search" label="Cari kata kunci" single-line
                     hide-details>
                 </v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" to="/sekdes/permohonan-surat/">Kembali</v-btn>
+                <v-btn color="primary" to="/sekdes/permohonan-surat">Kembali</v-btn>
             </v-toolbar>
             <v-divider></v-divider>
             <v-card-text>
                 <v-col cols="12">
-                    <v-data-table :headers="headers" :items="sktms" disable-pagination :options.sync="options"
-                        :server-items-length="totalSKTMs" :loading="loading" class="elevation-1 mb-2"
+                    <v-data-table :headers="headers" :items="kks" disable-pagination :options.sync="options"
+                        :server-items-length="totalKKs" :loading="loading" class="elevation-1 mb-2"
                         :hide-default-footer="true">
                         <template v-slot:[`item.actions`]="{ item }">
-                            <router-link :to="'/sekdes/permohonan-surat/sktm/' + item.id" class="primary--text"
+                            <router-link :to="'/sekdes/permohonan-surat/kehilangan-kk/' + item.id" class="primary--text"
                                 style="text-decoration: none;">
                                 Selengkapnya</router-link>
                             |
-                            <!-- <router-link :to="'/admin/permohonan-surat/sktm/' + item.id + '/edit'" class="primary--text"
-                                style="text-decoration: none;">
-                                Edit</router-link>
-                            | -->
                             <a href="javascript:void(0)" class="primary--text" @click="hapus(item)"
                                 style="text-decoration: none;">Hapus</a>
                         </template>
@@ -62,8 +58,8 @@ export default {
     layout: 'sekdes',
     data() {
         return {
-            totalSKTMs: 0,
-            sktms: [],
+            totalKKs: 0,
+            kks: [],
             loading: true,
             options: {},
             search: '',
@@ -77,7 +73,6 @@ export default {
                 { text: 'Tanggal', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                { text: 'Status', value: 'status' },
                 { text: 'Aksi', value: 'actions' },
             ],
             pageSize: 5,
@@ -90,61 +85,59 @@ export default {
         options: {
             handler() {
                 // this.getDataFromApi()
-                this.getSKTMData()
+                this.getKKData()
             },
             deep: true,
         },
         search(value) {
             this.search = value
             this.page = 1
-            this.getSKTMData()
+            this.getKKData()
         }
     },
     methods: {
-        async getSKTMData() {
+        async getKKData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/sktm', {
+            await this.$axios.$get('http://localhost:3333/kehilangan-kk', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
                     search: this.search
                 }
             }).then(res => {
-                this.getDisplaySKTM(res)
-                this.totalSKTMs = res.meta.total
+                this.getDisplayKK(res)
+                this.totalKKs = res.meta.total
                 this.loading = false
                 this.totalPages = res.meta.last_page
             })
         },
-        getDisplaySKTM(data) {
-            this.sktms = data.data.map((sktm, i) => {
+        getDisplayKK(data) {
+            this.kks = data.data.map((kk, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
-                const tgl = DateTime.fromISO(sktm.created_at).toFormat('yyyy-LL-dd')
-                const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const tgl = DateTime.fromISO(kk.created_at).toFormat('yyyy-LL-dd')
                 return {
                     no: no,
-                    id: sktm.id,
-                    nama: sktm.nama,
-                    status: status,
-                    nik: sktm.nik,
+                    id: kk.id,
+                    nama: kk.nama,
+                    nik: kk.nik,
                     tanggal: tgl
                 };
             })
         },
         handlePageChange(value) {
             this.page = value;
-            this.getSKTMData();
+            this.getKKData();
         },
         handlePageSizeChange(size) {
             this.pageSize = size;
             this.page = 1;
-            this.getSKTMData();
+            this.getKKData();
         },
         hapus(val) {
-            const sktm = val
+            const kk = val
             this.$swal.fire({
                 title: 'Peringatan?',
-                text: "Apakah anda yakin untuk hapus data " + sktm.nama,
+                text: "Apakah anda yakin untuk hapus data " + kk.nama,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#459EED',
@@ -152,12 +145,12 @@ export default {
                 showLoaderOnConfirm: true,
                 confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
-                    return this.$axios.$delete(`http://localhost:3333/sktm/${sktm.id}`)
+                    return this.$axios.$delete(`http://localhost:3333/kehilangan-kk/${kk.id}`)
                         .then(res => {
                             console.log(res)
                         })
                         .catch(err => {
-                            this.$swal.fire('Gagal!', 'Gagal hapus data' + sktm.nama, 'error')
+                            this.$swal.fire('Gagal!', 'Gagal hapus data' + kk.nama, 'error')
                             this.$swal.hideLoading()
                         })
                 },
@@ -166,16 +159,16 @@ export default {
                 if (result.isConfirmed) {
                     this.$swal.fire(
                         'Sukses!',
-                        'Berhasil hapus data ' + sktm.nama,
+                        'Berhasil hapus data ' + kk.nama,
                         'success'
                     )
-                    this.getSKTMData()
+                    this.getKKData()
                 }
             })
         }
     },
     mounted() {
-        this.getSKTMData()
+        this.getKKData()
     }
 }
 </script>
