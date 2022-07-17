@@ -60,7 +60,7 @@ export default {
         }
     },
     async fetch() {
-        await this.$axios.$get(`http://localhost:3333/sku/${this.$route.params.id}`)
+        await this.$axios.$get(`/sku/${this.$route.params.id}`)
             .then(res => {
                 this.skus = {
                     nik: res.sku[0].nik,

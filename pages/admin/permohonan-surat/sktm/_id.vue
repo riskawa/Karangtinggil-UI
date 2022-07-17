@@ -55,7 +55,7 @@ export default {
         }
     },
     async asyncData({ $axios, params }) {
-        const sktms = await $axios.$get(`http://localhost:3333/sktm/${params.id}`).then(res => {
+        const sktms = await $axios.$get(`/sktm/${params.id}`).then(res => {
             return res
         })
         return sktms

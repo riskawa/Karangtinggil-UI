@@ -59,7 +59,7 @@ export default {
         }
     },
     async fetch() {
-        await this.$axios.$get(`http://localhost:3333/surat-keterangan/${this.$route.params.id}`)
+        await this.$axios.$get(`/surat-keterangan/${this.$route.params.id}`)
             .then(res => {
                 this.surat_keterangans = {
                     nik: res.surat_keterangan[0].nik,

@@ -55,7 +55,7 @@ export default {
         }
     },
     async asyncData({ $axios, params }) {
-        const skcks = await $axios.$get(`http://localhost:3333/skck/${params.id}`).then(res => {
+        const skcks = await $axios.$get(`/skck/${params.id}`).then(res => {
             return res
         })
         return skcks

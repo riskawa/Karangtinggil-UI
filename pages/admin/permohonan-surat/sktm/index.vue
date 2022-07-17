@@ -60,7 +60,6 @@
 
 <script>
 import { DateTime } from 'luxon'
-
 export default {
     layout: 'admin',
     data() {
@@ -106,7 +105,7 @@ export default {
     methods: {
         async getSKTMData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/sktm', {
+            await this.$axios.$get('/sktm', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
@@ -155,7 +154,7 @@ export default {
                 showLoaderOnConfirm: true,
                 confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
-                    return this.$axios.$delete(`http://localhost:3333/sktm/${sktm.id}`)
+                    return this.$axios.$delete(`/sktm/${sktm.id}`)
                         .then(res => {
                             console.log(res)
                         })

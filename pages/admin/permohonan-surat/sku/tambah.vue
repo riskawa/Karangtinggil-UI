@@ -126,7 +126,6 @@
 
 <script>
 import { object, string } from 'yup'
-
 const skuSchema = object({
     nama_usaha: string().required('Nama Usaha harus diisi'),
     jenis_usaha: string().required('Jenis Usaha harus diisi'),
@@ -153,7 +152,7 @@ export default {
         }
     },
     async fetch() {
-        this.$axios.$get('http://localhost:3333/pemohon/all')
+        this.$axios.$get('/pemohon/all')
             .then(res => {
                 this.pemohons = res
             })
@@ -162,7 +161,7 @@ export default {
     },
     methods: {
         selectPemohon(evt) {
-            this.$axios.$get(`http://localhost:3333/pemohon/${evt}`)
+            this.$axios.$get(`/pemohon/${evt}`)
                 .then(res => {
                     this.pemohon = res.pemohon
                     this.formVisible = true
@@ -183,13 +182,12 @@ export default {
                 .validate(this.values, { abortEarly: false })
                 .then(() => {
                     this.errors = {};
-
                     const fd = new FormData()
                     fd.append('pemohonNik', this.select)
                     fd.append('nama_usaha', this.values.nama_usaha)
                     fd.append('alamat_usaha', this.values.alamat_usaha)
                     fd.append('jenis_usaha', this.values.jenis_usaha)
-                    this.$axios.$post('http://localhost:3333/sku ', fd)
+                    this.$axios.$post('/sku ', fd)
                         .then(() => {
                             const Toast = this.$swal.mixin({
                                 toast: true,
@@ -205,7 +203,6 @@ export default {
                                     toast.addEventListener('mouseleave', this.$swal.resumeTimer)
                                 }
                             })
-
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Sukses tambah data SKU'
@@ -216,7 +213,6 @@ export default {
                             this.errors = {};
                             response.data.errors.map(e => {
                                 this.$toast.error(e.message, {
-
                                 });
                             })
                         })

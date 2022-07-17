@@ -131,6 +131,7 @@ export default {
                 'Tanggal Lahir': 'tanggal_lahir',
                 'NIK': 'nik',
                 'Nama': 'nama',
+                'Alamat': 'alamat'
             },
             json_data: [],
             json_meta: [

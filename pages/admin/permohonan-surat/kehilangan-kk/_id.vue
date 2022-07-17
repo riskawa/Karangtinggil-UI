@@ -57,7 +57,7 @@ export default {
         }
     },
     async fetch() {
-        await this.$axios.$get(`http://localhost:3333/kehilangan-kk/${this.$route.params.id}`)
+        await this.$axios.$get(`/kehilangan-kk/${this.$route.params.id}`)
             .then(res => {
                 this.kehilangan_kks = {
                     nik: res.kehilangan_kk[0].nik,

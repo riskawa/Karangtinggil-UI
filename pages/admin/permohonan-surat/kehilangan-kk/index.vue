@@ -56,7 +56,6 @@
 
 <script>
 import { DateTime } from 'luxon'
-
 export default {
     layout: 'admin',
     data() {
@@ -101,7 +100,7 @@ export default {
     methods: {
         async getKKData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/kehilangan-kk', {
+            await this.$axios.$get('/kehilangan-kk', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
@@ -148,7 +147,7 @@ export default {
                 showLoaderOnConfirm: true,
                 confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
-                    return this.$axios.$delete(`http://localhost:3333/kehilangan-kk/${kk.id}`)
+                    return this.$axios.$delete(`/kehilangan-kk/${kk.id}`)
                         .then(res => {
                             console.log(res)
                         })

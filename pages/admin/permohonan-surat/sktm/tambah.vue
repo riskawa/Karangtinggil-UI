@@ -106,7 +106,6 @@
 
 <script>
 import { object, string } from 'yup'
-
 const sktmSchema = object({
     keperluan: string().required('Keperluan harus diisi'),
 })
@@ -128,7 +127,7 @@ export default {
         }
     },
     async fetch() {
-        this.$axios.$get('http://localhost:3333/pemohon/all')
+        this.$axios.$get('/pemohon/all')
             .then(res => {
                 this.pemohons = res
             })
@@ -137,7 +136,7 @@ export default {
     },
     methods: {
         selectPemohon(evt) {
-            this.$axios.$get(`http://localhost:3333/pemohon/${evt}`)
+            this.$axios.$get(`/pemohon/${evt}`)
                 .then(res => {
                     this.pemohon = res.pemohon
                     this.formVisible = true
@@ -162,7 +161,7 @@ export default {
                     const fd = new FormData()
                     fd.append('pemohonNik', this.select)
                     fd.append('keperluan', this.values.keperluan)
-                    this.$axios.$post('http://localhost:3333/sktm ', fd)
+                    this.$axios.$post('/sktm ', fd)
                         .then(() => {
                             this.isLoading = false;
                             const Toast = this.$swal.mixin({
@@ -179,7 +178,6 @@ export default {
                                     toast.addEventListener('mouseleave', this.$swal.resumeTimer)
                                 }
                             })
-
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Sukses tambah data SKTM'
@@ -191,7 +189,6 @@ export default {
                             this.errors = {};
                             response.data.errors.map(e => {
                                 this.$toast.error(e.message, {
-
                                 });
                             })
                         })

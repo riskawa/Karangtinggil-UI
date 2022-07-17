@@ -66,7 +66,6 @@
 <script>
 import { DateTime } from 'luxon'
 import { jsPDF } from 'jspdf'
-
 export default {
     name: 'SktmTable',
     data() {
@@ -112,7 +111,7 @@ export default {
     methods: {
         async getSKTMData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/sktm', {
+            await this.$axios.$get('/sktm', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
@@ -160,11 +159,11 @@ export default {
                 confirmButtonColor: '#459EED',
                 cancelButtonColor: '#d33',
                 showLoaderOnConfirm: true,
-                confirmButtonText: 'Yes',
+                confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
                     const fd = new FormData()
                     fd.append('status', '1')
-                    return this.$axios.$put(`http://localhost:3333/sktm/status/${sktm.id}`, fd)
+                    return this.$axios.$put(`/sktm/status/${sktm.id}`, fd)
                         .then(res => {
                             console.log(res)
                         })
@@ -202,17 +201,17 @@ export default {
             const sktm = val
             this.$swal.fire({
                 title: 'Peringatan?',
-                text: "Apakah anda yakin mengubah status permohonan SKTM " + sktm.nama + " menjadi sudah diambil?",
+                text: "Apakah anda yakin mengubah status permohonan SKTM " + sktm.nama + "menjadi sudah diambil?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#459EED',
                 cancelButtonColor: '#d33',
                 showLoaderOnConfirm: true,
-                confirmButtonText: 'Yes',
+                confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
                     const fd = new FormData()
                     fd.append('status', '2')
-                    return this.$axios.$put(`http://localhost:3333/sktm/status/${sktm.id}`, fd)
+                    return this.$axios.$put(`/sktm/status/${sktm.id}`, fd)
                         .then(res => {
                             console.log(res)
                         })
@@ -240,14 +239,14 @@ export default {
                     })
                     Toast.fire({
                         icon: 'success',
-                        title: 'Surat sudah diambil'
+                        title: 'Sukses menyetujui permohonan'
                     })
                     this.getSKTMData()
                 }
             })
         },
         async cetak(id) {
-            const data = await this.$axios.$get(`http://localhost:3333/sktm/${id}`)
+            const data = await this.$axios.$get(`/sktm/${id}`)
             const doc = new jsPDF('p', 'mm', [330, 210])
             const tanggal = DateTime.now().toFormat('yyyy-LL-dd')
             doc.addImage("/logo.png", 'PNG', 10, 10, 35, 40)
@@ -328,7 +327,6 @@ export default {
             window.open(doc.output('bloburl'), '_blank')
             // doc.save()
         },
-
     },
     mounted() {
         this.getSKTMData()

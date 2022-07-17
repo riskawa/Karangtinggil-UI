@@ -60,7 +60,6 @@
 
 <script>
 import { DateTime } from 'luxon'
-
 export default {
     layout: 'admin',
     data() {
@@ -105,7 +104,7 @@ export default {
     methods: {
         async getSKCKData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/skck', {
+            await this.$axios.$get('/skck', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
@@ -152,7 +151,7 @@ export default {
                 showLoaderOnConfirm: true,
                 confirmButtonText: 'Yes, delete it!',
                 preConfirm: (hapus) => {
-                    return this.$axios.$delete(`http://localhost:3333/skck/${skck.id}`)
+                    return this.$axios.$delete(`/skck/${skck.id}`)
                         .then(res => {
                             console.log(res)
                         })

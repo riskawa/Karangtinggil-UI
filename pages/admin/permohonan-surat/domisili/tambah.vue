@@ -107,7 +107,6 @@
 <script>
 import { forEach } from 'lodash'
 import { object, string } from 'yup'
-
 const domisiliSchema = object({
     keperluan: string().required('Keperluan harus diisi'),
 })
@@ -128,7 +127,7 @@ export default {
         }
     },
     async fetch() {
-        this.$axios.$get('http://localhost:3333/pemohon/all')
+        this.$axios.$get('/pemohon/all')
             .then(res => {
                 this.pemohons = res
             })
@@ -137,7 +136,7 @@ export default {
     },
     methods: {
         selectPemohon(evt) {
-            this.$axios.$get(`http://localhost:3333/pemohon/${evt}`)
+            this.$axios.$get(`/pemohon/${evt}`)
                 .then(res => {
                     this.pemohon = res.pemohon
                     this.formVisible = true
@@ -158,11 +157,10 @@ export default {
                 .validate(this.values, { abortEarly: false })
                 .then(() => {
                     this.errors = {};
-
                     const fd = new FormData()
                     fd.append('pemohonNik', this.select)
                     fd.append('keperluan', this.values.keperluan)
-                    this.$axios.$post('http://localhost:3333/domisili ', fd)
+                    this.$axios.$post('/domisili ', fd)
                         .then(() => {
                             const Toast = this.$swal.mixin({
                                 toast: true,
@@ -178,7 +176,6 @@ export default {
                                     toast.addEventListener('mouseleave', this.$swal.resumeTimer)
                                 }
                             })
-
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Sukses tambah data Domisili'
@@ -189,7 +186,6 @@ export default {
                             this.errors = {};
                             response.data.errors.map(e => {
                                 this.$toast.error(e.message, {
-
                                 });
                             })
                         })
