@@ -55,7 +55,7 @@ export default {
         }
     },
     async asyncData({ $axios, params }) {
-        const domisilis = await $axios.$get(`http://localhost:3333/domisili/${params.id}`).then(res => {
+        const domisilis = await $axios.$get(`/domisili/${params.id}`).then(res => {
             return res
         })
         return domisilis
