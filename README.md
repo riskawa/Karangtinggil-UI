@@ -3,18 +3,15 @@
 ## Build Setup
 
 ```bash
-# install dependencies
-$ npm install
+INSTALASI FRONTEND
+1.	Download dan install database PostgreSQL serta Node js
+    (https://www.postgresql.org/download/)
+    (https://nodejs.org/en/download/
+2.	Clone/Download repo karangtinggil-UI
+    (https://github.com/riskawa/karangtinggil-UI)
+3.	Install dependency dengan perintah "npm install" di direktori karangtinggil-UI
+4.	Jalankan frontend dengan perintah "npm run dev"
 
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
 ```
 
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
