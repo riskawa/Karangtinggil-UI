@@ -1,12 +1,11 @@
 # karangtinggil
 
-## Build Setup
+## INSTALASI FRONTEND
 
 ```bash
-INSTALASI FRONTEND
-1.	Download dan install database PostgreSQL serta Node js
-    (https://www.postgresql.org/download/)
-    (https://nodejs.org/en/download/)
+1. Download dan install database PostgreSQL serta Node js
+   [PostgreSQL](https://www.postgresql.org/download/).
+   (https://nodejs.org/en/download/)
 2.	Clone/Download repo karangtinggil-UI
     (https://github.com/riskawa/karangtinggil-UI)
 3.	Install dependency dengan perintah "npm install" di direktori karangtinggil-UI
