@@ -131,7 +131,8 @@ export default {
                 'Tanggal Lahir': 'tanggal_lahir',
                 'NIK': 'nik',
                 'Nama': 'nama',
-                'Alamat': 'alamat'
+                'Alamat': 'alamat',
+                'Tangggal': 'created_at',
             },
             json_data: [],
             json_meta: [
@@ -154,6 +155,7 @@ export default {
                     sortable: false,
                     value: 'no',
                 },
+                { text: 'Tanggal Pendaftaran', value: 'created_at' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
                 { text: 'Tanggal Lahir', value: 'tanggal_lahir' },
@@ -249,8 +251,10 @@ export default {
             this.json_data = data.data.map((pemohon, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(pemohon.tanggal_lahir).toFormat('yyyy-LL-dd')
+                const tgldaftar = DateTime.fromISO(pemohon.created_at).toFormat('yyyy-LL-dd')
                 return {
                     no: no,
+                    created_at: tgldaftar,
                     tanggal_lahir: tgl,
                     nik: pemohon.nik,
                     nama: pemohon.nama,
@@ -260,8 +264,10 @@ export default {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = (pemohon.tanggal_lahir == null) ? '' : DateTime.fromISO(pemohon.tanggal_lahir).toFormat('yyyy-LL-dd')
                 const status = (pemohon.status == 1) ? 'Disetujui' : (pemohon.status == 2) ? 'Surat Belum diambil' : (pemohon.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const tgldaftar = (pemohon.created_at == null) ? '' : DateTime.fromISO(pemohon.created_at).toFormat('yyyy-LL-dd')
                 return {
                     no: no,
+                    created_at: tgldaftar,
                     id: pemohon.id,
                     nama: pemohon.nama,
                     nik: pemohon.nik,
