@@ -265,7 +265,7 @@ export default {
             this.sktms = data.data.map((sktm, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(sktm.created_at).toFormat('yyyy-LL-dd')
-                const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                // const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
                 return {
                     no: no,
                     id: sktm.id,

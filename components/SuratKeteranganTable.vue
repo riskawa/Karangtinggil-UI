@@ -259,7 +259,7 @@ export default {
             doc.setFontSize(13)
             doc.text('SURAT KETERANGAN', 85, 62)
             doc.line(85, 62.5, 134, 62.5)
-            doc.text(`Nomor : 470/${data.surat_keterangan[0].id}/413.323.06/${DateTime.now().year}`, 77, 67)
+            doc.text(`Nomor : 470/${data.surat_keterangan[0].id}/413.313.06/${DateTime.now().year}`, 77, 67)
             doc.setFont('times', '', 400)
             doc.text('Yang Bertanda tangan di bawah ini :', 15, 78)
             doc.text('Nama', 20, 85)
