@@ -26,6 +26,14 @@
           </v-btn>
         </template>
         <v-list nav>
+          <v-list-item href="/admin/password">
+            <v-list-item-action>
+              <v-icon>mdi-key</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>
+              Ganti Password
+            </v-list-item-title>
+          </v-list-item>
           <v-list-item @click="logout()">
             <v-list-item-action>
               <v-icon>mdi-logout</v-icon>
@@ -50,7 +58,6 @@
 
 <script>
 // import { mapGetters } from 'vuex'
-
 export default {
   name: 'AdminLayout',
   middleware: ['auth', 'admin'],

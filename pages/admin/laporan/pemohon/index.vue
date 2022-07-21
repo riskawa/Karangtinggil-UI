@@ -1,6 +1,6 @@
 <template>
     <v-col cols="12" class="d-flex flex-column align-center justify-space-between">
-        <h1>Daftar Pemohon Surat </h1>
+        <h1>Daftar Pemohon Surat</h1>
         <v-col cols="6">
             <v-card class="mb-2">
                 <v-card-text>
@@ -17,23 +17,39 @@
                                     </td>
                                 </tr>
                                 <tr v-if="pilih == 1">
-                                    <td>Tanggal</td>
+                                    <td>Tanggal Lahir</td>
                                     <td>:</td>
                                     <td>
                                         <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40"
                                             transition="scale-transition" offset-y min-width="auto">
                                             <template v-slot:activator="{ on, attrs }">
-                                                <v-text-field v-model="tanggal" label="Tanggal"
+                                                <v-text-field v-model="tanggal_lahir" label="Tanggal Lahir"
                                                     prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" solo>
                                                 </v-text-field>
                                             </template>
-                                            <v-date-picker v-model="tanggal" @input="menu = false">
+                                            <v-date-picker v-model="tanggal_lahir" @input="menu = false">
+                                            </v-date-picker>
+                                        </v-menu>
+                                    </td>
+                                </tr>
+                                <tr v-if="pilih == 4">
+                                    <td>Tanggal Pendaftaran</td>
+                                    <td>:</td>
+                                    <td>
+                                        <v-menu v-model="menu_daftar" :close-on-content-click="false" :nudge-right="40"
+                                            transition="scale-transition" offset-y min-width="auto">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="tanggal_daftar" label="Tanggal Daftar"
+                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" solo>
+                                                </v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="tanggal_daftar" @input="menu_daftar = false">
                                             </v-date-picker>
                                         </v-menu>
                                     </td>
                                 </tr>
                                 <tr v-else-if="pilih == 2">
-                                    <td>Bulan</td>
+                                    <td>Bulan Lahir</td>
                                     <td>:</td>
                                     <td>
                                         <v-select :items="months" item-text="text" item-value="value" v-model="bulan"
@@ -41,7 +57,7 @@
                                     </td>
                                 </tr>
                                 <tr v-else-if="pilih == 3">
-                                    <td>Tahun</td>
+                                    <td>Tahun Lahir</td>
                                     <td>:</td>
                                     <td class="">
                                         <v-select :items="years" v-model="tahun" label="Tahun" solo>
@@ -96,7 +112,6 @@
 <script>
 import { DateTime } from 'luxon'
 import vueJsonExcelUmd from 'vue-json-excel';
-
 export default {
     layout: 'admin',
     mounted() {
@@ -115,24 +130,27 @@ export default {
             items: [
                 {
                     value: 1,
-                    text: "Per Tanggal"
+                    text: "Per Tanggal Lahir"
                 },
                 {
                     value: 2,
-                    text: "Per Bulan"
+                    text: "Per Bulan Lahir"
                 },
                 {
                     value: 3,
-                    text: "Per Tahun"
+                    text: "Per Tahun Lahir"
+                },
+                {
+                    value: 4,
+                    text: "Per Tanggal Pendaftaran"
                 },
             ],
             json_fields: {
                 No: 'no',
-                'Tanggal': 'tanggal',
+                'Tanggal Lahir': 'tanggal_lahir',
+                'Tanggal Daftar': 'tanggal_daftar',
                 'NIK': 'nik',
                 'Nama': 'nama',
-                //'Keperluan': 'keperluan'
-                //'Status': 'status'
             },
             json_data: [],
             json_meta: [
@@ -155,17 +173,19 @@ export default {
                     sortable: false,
                     value: 'no',
                 },
-                { text: 'Tanggal', value: 'tanggal' },
+                {
+                    text: 'Tanggal Pendaftaran', align: 'start', value: 'tanggal_daftar',
+                },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                //{ text: 'Keperluan', value: 'keperluan' },
-                //{ text: 'Status', value: 'status' },
+                { text: 'Tanggal Lahir', value: 'tanggal_lahir' },
             ],
             pageSize: 5,
             pageSizes: [5, 10, 20, 50, 100],
             page: 1,
             totalPages: 0,
-            tanggal: '',
+            tanggal_lahir: '',
+            tanggal_daftar: '',
             months: [
                 { text: 'Januari', value: 1 },
                 { text: 'Februari', value: 2 },
@@ -185,6 +205,7 @@ export default {
             tahun: 0,
             jenis_kelamin: ['Laki-laki', 'Perempuan'],
             menu: false,
+            menu_daftar: false,
             pilih: 0,
             filterType: 0,
             filter: '',
@@ -233,7 +254,7 @@ export default {
         },
         async getPemohonData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/pemohon', {
+            await this.$axios.$get('/pemohon', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
@@ -251,29 +272,29 @@ export default {
         getDisplayPemohon(data) {
             this.json_data = data.data.map((pemohon, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
-                const tgl = DateTime.fromISO(pemohon.created_at).toFormat('yyyy-LL-dd')
-               // const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const tgl = DateTime.fromISO(pemohon.tanggal_lahir).toFormat('yyyy-LL-dd')
+                const tgl_daftar = DateTime.fromISO(pemohon.created_at).toFormat('yyyy-LL-dd')
                 return {
                     no: no,
-                    tanggal: tgl,
+                    tanggal_lahir: tgl,
+                    tanggal_daftar: tgl_daftar,
                     nik: pemohon.nik,
                     nama: pemohon.nama,
-                    //keperluan: sktm.keperluan,
-                   // status: status,
                 };
             })
-            this.pemohon = data.data.map((pemohon, i) => {
+            this.pemohons = data.data.map((pemohon, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
-                const tgl = DateTime.fromISO(pemohon.created_at).toFormat('yyyy-LL-dd')
-                // const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const tgl = (pemohon.tanggal_lahir == null) ? '' : DateTime.fromISO(pemohon.tanggal_lahir).toFormat('yyyy-LL-dd')
+                const tgl_daftar = (pemohon.created_at == null) ? '' : DateTime.fromISO(pemohon.created_at).toFormat('yyyy-LL-dd')
+                const status = (pemohon.status == 1) ? 'Disetujui' : (pemohon.status == 2) ? 'Surat Belum diambil' : (pemohon.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                console.log(pemohon)
                 return {
                     no: no,
                     id: pemohon.id,
                     nama: pemohon.nama,
-                    //keperluan: sktm.keperluan,
-                   // status: status,
                     nik: pemohon.nik,
-                    tanggal: tgl
+                    tanggal_lahir: tgl,
+                    tanggal_daftar: tgl_daftar,
                 };
             })
         },
@@ -292,7 +313,7 @@ export default {
         filterSurat() {
             switch (this.pilih) {
                 case 1:
-                    this.filter = this.tanggal
+                    this.filter = this.tanggal_lahir
                     this.filterType = this.pilih
                     this.page = 1
                     this.getPemohonData()
@@ -309,6 +330,12 @@ export default {
                     this.page = 1
                     this.getPemohonData()
                     break
+                case 4:
+                    this.filter = this.tanggal_daftar
+                    this.filterType = this.pilih
+                    this.page = 1
+                    this.getPemohonData()
+                    break
                 default:
                     break
             }
@@ -317,12 +344,11 @@ export default {
             this.filter = ''
             this.pilih = 0
             this.filterType = 0
-            this.tanggal = ''
+            this.tanggal_lahir = ''
             this.bulan = 0
             this.tahun = 0
             this.getPemohonData()
         },
     },
-
 }
 </script>

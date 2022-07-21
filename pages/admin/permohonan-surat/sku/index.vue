@@ -72,9 +72,10 @@ export default {
                     sortable: false,
                     value: 'no',
                 },
-                { text: 'Tanggal', value: 'tanggal' },
+                { text: 'Tanggal Pendaftaran', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
+                { text: 'Status', value: 'status' },
                 { text: 'Aksi', value: 'actions' },
             ],
             pageSize: 5,
@@ -117,11 +118,13 @@ export default {
             this.skus = data.data.map((sku, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(sku.created_at).toFormat('yyyy-LL-dd')
+                const status = (sku.status == 1) ? 'Disetujui' : (sku.status == 2) ? 'Surat Belum diambil' : (sku.status == 3) ? 'Surat diambil' : 'Belum Diproses'
                 return {
                     no: no,
                     id: sku.id,
                     nama: sku.nama,
                     nik: sku.nik,
+                    status: status,
                     tanggal: tgl
                 };
             })

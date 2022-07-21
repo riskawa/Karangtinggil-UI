@@ -76,7 +76,7 @@ export default {
                     sortable: false,
                     value: 'no',
                 },
-                { text: 'Tanggal', value: 'tanggal' },
+                { text: 'Tanggal Pendaftaran', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
                 { text: 'Status', value: 'status' },

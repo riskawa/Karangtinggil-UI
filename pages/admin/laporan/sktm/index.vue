@@ -48,6 +48,38 @@
                                         </v-select>
                                     </td>
                                 </tr>
+                                <tr v-if="pilih == 4">
+                                    <td>Tanggal Awal</td>
+                                    <td>:</td>
+                                    <td>
+                                        <v-menu v-model="menu_awal" :close-on-content-click="false" :nudge-right="40"
+                                            transition="scale-transition" offset-y min-width="auto">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="tanggal_awal" label="Tanggal Awal"
+                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" solo>
+                                                </v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="tanggal_awal" @input="menu_awal = false">
+                                            </v-date-picker>
+                                        </v-menu>
+                                    </td>
+                                </tr>
+                                <tr v-if="pilih == 4">
+                                    <td>Tanggal Akhir</td>
+                                    <td>:</td>
+                                    <td>
+                                        <v-menu v-model="menu_akhir" :close-on-content-click="false" :nudge-right="40"
+                                            transition="scale-transition" offset-y min-width="auto">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="tanggal_akhir" label="Tanggal Akhir"
+                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" solo>
+                                                </v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="tanggal_akhir" @input="menu_akhir = false">
+                                            </v-date-picker>
+                                        </v-menu>
+                                    </td>
+                                </tr>
                             </tbody>
                         </template>
                     </v-simple-table>
@@ -96,7 +128,6 @@
 <script>
 import { DateTime } from 'luxon'
 import vueJsonExcelUmd from 'vue-json-excel';
-
 export default {
     layout: 'admin',
     mounted() {
@@ -125,14 +156,18 @@ export default {
                     value: 3,
                     text: "Per Tahun"
                 },
+                {
+                    value: 4,
+                    text: "Range Tanggal"
+                },
             ],
             json_fields: {
                 No: 'no',
                 'Tanggal': 'tanggal',
                 'NIK': 'nik',
                 'Nama': 'nama',
-                'Keperluan': 'keperluan'
-                //'Status': 'status'
+                'Keperluan': 'keperluan',
+                'Status': 'status'
             },
             json_data: [],
             json_meta: [
@@ -158,14 +193,15 @@ export default {
                 { text: 'Tanggal', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
-                { text: 'Keperluan', value: 'keperluan' },
-                //{ text: 'Status', value: 'status' },
+                { text: 'Status', value: 'status' },
             ],
             pageSize: 5,
             pageSizes: [5, 10, 20, 50, 100],
             page: 1,
             totalPages: 0,
             tanggal: '',
+            tanggal_awal: '',
+            tanggal_akhir: '',
             months: [
                 { text: 'Januari', value: 1 },
                 { text: 'Februari', value: 2 },
@@ -185,6 +221,8 @@ export default {
             tahun: 0,
             jenis_kelamin: ['Laki-laki', 'Perempuan'],
             menu: false,
+            menu_awal: false,
+            menu_akhir: false,
             pilih: 0,
             filterType: 0,
             filter: '',
@@ -233,7 +271,7 @@ export default {
         },
         async getSKTMData() {
             this.loading = true
-            await this.$axios.$get('http://localhost:3333/sktm', {
+            await this.$axios.$get('/sktm', {
                 params: {
                     limit: this.pageSize,
                     page: this.page - 1,
@@ -252,26 +290,25 @@ export default {
             this.json_data = data.data.map((sktm, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(sktm.created_at).toFormat('yyyy-LL-dd')
-               // const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
                 return {
                     no: no,
                     tanggal: tgl,
                     nik: sktm.nik,
                     nama: sktm.nama,
                     keperluan: sktm.keperluan,
-                   // status: status,
+                    status: status,
                 };
             })
             this.sktms = data.data.map((sktm, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(sktm.created_at).toFormat('yyyy-LL-dd')
-                // const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
+                const status = (sktm.status == 1) ? 'Disetujui' : (sktm.status == 2) ? 'Surat Belum diambil' : (sktm.status == 3) ? 'Surat diambil' : 'Belum Diproses'
                 return {
                     no: no,
                     id: sktm.id,
                     nama: sktm.nama,
-                    keperluan: sktm.keperluan,
-                   // status: status,
+                    status: status,
                     nik: sktm.nik,
                     tanggal: tgl
                 };
@@ -309,6 +346,12 @@ export default {
                     this.page = 1
                     this.getSKTMData()
                     break
+                case 4:
+                    this.filter = [this.tanggal_awal, this.tanggal_akhir]
+                    this.filterType = this.pilih
+                    this.page = 1
+                    this.getSKTMData()
+                    break
                 default:
                     break
             }
@@ -318,11 +361,12 @@ export default {
             this.pilih = 0
             this.filterType = 0
             this.tanggal = ''
+            this.tanggal_awal = ''
+            this.tanggal_akhir = ''
             this.bulan = 0
             this.tahun = 0
             this.getSKTMData()
         },
     },
-
 }
 </script>

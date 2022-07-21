@@ -120,11 +120,13 @@ export default {
         getDisplayPemohon(data) {
             this.pemohons = data.data.map((pemohon, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
+               
                 return {
                     no: no,
                     nama: pemohon.nama,
                     nik: pemohon.nik,
                     jenis_kelamin: pemohon.jenis_kelamin,
+                    
                 };
             })
         },

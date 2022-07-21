@@ -76,9 +76,10 @@ export default {
                     sortable: false,
                     value: 'no',
                 },
-                { text: 'Tanggal', value: 'tanggal' },
+                { text: 'Tanggal Pendaftaran', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
+                { text: 'Status', value: 'status' },
                 { text: 'Aksi', value: 'actions' },
             ],
             pageSize: 5,
@@ -121,11 +122,13 @@ export default {
             this.domisilis = data.data.map((domisili, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(domisili.created_at).toFormat('yyyy-LL-dd')
+                const status = (domisili.status == 1) ? 'Disetujui' : (domisili.status == 2) ? 'Surat Belum diambil' : (domisili.status == 3) ? 'Surat diambil' : 'Belum Diproses'
                 return {
                     no: no,
                     id: domisili.id,
                     nama: domisili.nama,
                     nik: domisili.nik,
+                    status: status,
                     tanggal: tgl
                 };
             })

@@ -76,9 +76,10 @@ export default {
                     sortable: false,
                     value: 'no',
                 },
-                { text: 'Tanggal', value: 'tanggal' },
+                { text: 'Tanggal Pendaftaran', value: 'tanggal' },
                 { text: 'NIK', value: 'nik' },
                 { text: 'Nama Lengkap', value: 'nama' },
+                { text: 'Status', value: 'status' },
                 { text: 'Aksi', value: 'actions' },
             ],
             pageSize: 5,
@@ -121,11 +122,13 @@ export default {
             this.surat_keterangans = data.data.map((surat_keterangan, i) => {
                 let no = (data.meta.current_page - 1) * data.meta.per_page + 1 + i
                 const tgl = DateTime.fromISO(surat_keterangan.created_at).toFormat('yyyy-LL-dd')
+                const status = (surat_keterangan.status == 1) ? 'Disetujui' : (surat_keterangan.status == 2) ? 'Surat Belum diambil' : (surat_keterangan.status == 3) ? 'Surat diambil' : 'Belum Diproses'
                 return {
                     no: no,
                     id: surat_keterangan.id,
                     nama: surat_keterangan.nama,
                     nik: surat_keterangan.nik,
+                    status: status,
                     tanggal: tgl
                 };
             })

@@ -100,6 +100,20 @@
                         </v-hover>
                     </v-col>
                 </v-row>
+                <v-row class="ml-13">
+                    <v-col cols="3">
+                        <v-hover v-slot="{ hover }">
+                            <v-card to="/admin/laporan/pemohonsurat" color="primary" dark :elevation="hover ? 8 : 4"
+                                height="160" class="d-flex flex-column pa-4" shaped>
+                                <v-icon size=70>mdi-email</v-icon>
+                                <!-- <v-img src="/surat.png" width="50"></v-img> -->
+                                <v-card-text class="d-flex justify-center white--text text-h7 text-center">
+                                    Pemohon
+                                </v-card-text>
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                </v-row>
             </v-card-text>
         </v-card>
     </v-col>
