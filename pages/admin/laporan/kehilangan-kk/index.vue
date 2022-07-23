@@ -48,6 +48,38 @@
                                         </v-select>
                                     </td>
                                 </tr>
+                                <tr v-if="pilih == 4">
+                                    <td>Tanggal Awal</td>
+                                    <td>:</td>
+                                    <td>
+                                        <v-menu v-model="menu_awal" :close-on-content-click="false" :nudge-right="40"
+                                            transition="scale-transition" offset-y min-width="auto">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="tanggal_awal" label="Tanggal Awal"
+                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" solo>
+                                                </v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="tanggal_awal" @input="menu_awal = false">
+                                            </v-date-picker>
+                                        </v-menu>
+                                    </td>
+                                </tr>
+                                <tr v-if="pilih == 4">
+                                    <td>Tanggal Akhir</td>
+                                    <td>:</td>
+                                    <td>
+                                        <v-menu v-model="menu_akhir" :close-on-content-click="false" :nudge-right="40"
+                                            transition="scale-transition" offset-y min-width="auto">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="tanggal_akhir" label="Tanggal Akhir"
+                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" solo>
+                                                </v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="tanggal_akhir" @input="menu_akhir = false">
+                                            </v-date-picker>
+                                        </v-menu>
+                                    </td>
+                                </tr>
                             </tbody>
                         </template>
                     </v-simple-table>
@@ -124,6 +156,10 @@ export default {
                 {
                     value: 3,
                     text: "Per Tahun"
+                },
+                {
+                    value: 4,
+                    text: "Range Tanggal"
                 },
             ],
             json_fields: {
